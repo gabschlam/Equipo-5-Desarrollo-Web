@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8"> 
+        <link rel="shortcut icon" href="/img/container-robot-tech-technology-brand_icon-icons.com_59169.ico">
+        <title>
+            Primera pr&aacute;ctica
+        </title>
+        <style>
+            body{
+                font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+                margin-top: 100px;
+                margin-left: 200px;
+                margin-right: 200px;
+                margin-bottom: 100px;
+            }
+            img{
+                height: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <h1>Anteproyecto</h1>
+
+        <h2>Descripción del sistema</h2>
+        <p>La aplicación web a desarrollar tendrá como principal función generar la confianza de las compras por internet en los usuarios siendo un intermediario entre el comprador y el vendedor. 
+        Los vendedores podrán ingresar para postear sus productos. Para poder ser vendedor/comprador en la aplicación se necesitará una cuenta la cual pedirá como requisitos: correo electrónico, la creación de una contraseña e identificación oficial como medida de seguridad. 
+        Al realizarse una compra, la aplicación retendrá el capital a disposición y lo liberará al tener el producto en nuestras manos, después de comprobar su condición.
+        </p>
+        <h2>Problemática</h2>
+        <p>
+            En muchas ocasiones queremos vender artículos nuestros que se encuentran en buenas condiciones, sin embargo, es difícil llegar a un acuerdo con personas que no conocemos. Plataformas como https://www.segundamano.mx/ te ayudan a ponerte en contacto con compradores. Lo malo es que nunca sabemos si es seguro vender tus productos a esas personas ya que corremos el riesgo de que sea un perfil falso y al final te citen en algún lugar riesgoso para despojarte de tu producto.
+        </p>        
+        <h2>Solución</h2>
+        <p>
+            Crear una herramienta en donde interpretaremos el rol de intermediario entre vendedor y comprador. El servicio como intermediario asegura que el producto dado por el vendedor esté en buenas condiciones y que se haya recibido el pago por parte del comprador, antes de enviar el producto y el dinero, respectivamente.
+        </p>        
+        
+        <h2>Diferencias con otras soluciones</h2>
+        <p>
+            Otras soluciones como Segunda Mano y Mercadolibre obligan a existir un contacto entre comprador y vendedor, lo cual puede causar inseguridad y falta de integridad, además de desconfianza al vender tu producto.
+        </p>
+        
+        
+        <h2>Lista de soluciones similares</h2>
+        <ul>
+            <li>
+                Segunda Mano: Plataforma en línea donde da anuncios clasificados gratis, obligando al vendedor y al comprador tener un contacto físico.      
+            </li>
+            <li>
+                Mercadolibre: Plataforma donde existen compras, ventas y pagos por Internet, teniendo un poco más de seguridad y confianza que Segunda Mano, pero no es un intermediario, pudiendo prestarse a estafas.
+            </li>
+            <li>
+                Facebook Market: Sistema de compra y venta de productos en Facebook, sin tener ningún control de que se vende y quien desea comprar, dando desconfianza en cuanto a pago y entrega de producto.
+
+            </li>
+        </ul>
+        <div><img src="./img/segundamano.jpeg" alt=""><img src="./img/ml.jpeg" alt="">
+        <img src="./img/fbmrkt.jpeg" alt=""></div>
+        <h3>Historias de usuario</h3>
+        <ol>
+                <li style="font-family: sans-serif;">
+                    Como vendedor busco una manera confiable de vender para que no me roben.
+                </li>
+            <li style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+                Como vendedor necesito un Marketplace en línea para que más personas puedan ver los productos que vendo.  
+            </li>
+            <li style="font-family: monospace; font-weight: lighter;">
+                Como comprador busco poder verificar que estoy comprando lo que quiero para no gastar mi dinero en algo que no necesito.
+            </li>
+            <li style="font-family: arial;  font-style: oblique; ">
+                Como comprador busco un Marketplace en línea para comprar cosas que necesito.
+            </li>
+            <li style="font-family: Times New Roman; font-weight: bold;">
+                Como comprador y vendedor me gustaria saber la reputación que tiene la persona con la que estoy haciendo la transacción para no ponerme en riesgo.
+            </li>
+            <li style="font-family: Calibri;">
+                Como comprador me gustaría que un profesional pudiera checar lo que me están vendiendo para estar seguro que es lo que busco y que está en buenas condiciones.
+            </li>
+            <li style="font-family: Beirut; font-weight:900;">
+                Como vendedor me gustaria saber que la persona ya hizo el depósito de dinero para estás seguro de que se va a hacer la transacción y no ofrecerle el producto a otra persona.
+            </li>
+            <li style="font-family: Bell MT; font-style: italic;">
+                Como vendedor busco obtener ingresos deshaciendome de productos que ya no necesito pero que están en buenas condiciones.
+            </li>
+            <li style="font-family: cochin;">
+                Como comprador necesito comprar un producto de buena calidad y bajo costo pero en algún lugar de confianza.
+            </li>
+            <li style="font-family: Dotum;">
+                Como posible vendedor me gustaria ver a lo que se están vendiendo productos que tengo para ver si me conviene venderlos . 
+            </li>
+        </ol>  
+
+        <h2>Fragmento de Código</h2>
+        <code>// middleware.js <br>
+            var jwt = require('jwt-simple');<br>
+            var moment = require('moment');<br>
+            var config = require('./config');<br>
+            exports.ensureAuthenticated = function(req, res, next) {<br>
+              if(!req.headers.authorization) {<br>
+                return res <br>
+                  .status(403) <br>
+                  .send({message: "Tu petición no tiene cabecera de autorización"}); <br>
+              } <br>
+              <br>
+              var token = req.headers.authorization.split(" ")[1]; <br>
+              var payload = jwt.decode(token, config.TOKEN_SECRET); <br>
+              <br>
+              if(payload.exp &lt;= moment().unix()) { <br>
+                 return res <br>
+                    .status(401) <br>
+                    .send({message: "El token ha expirado"}); <br>
+              } <br>
+              <br>
+              req.user = payload.sub; <br>
+              next(); <br>
+            }</code>  
+            <h3>Referencia a la variable</h3>
+            <p>Sólo tenemos que obtener el token de ese String y lo hacemos con el método split de JavaScript:
+
+                var token = req.headers.authorization.split(" ")[1];
+                Decodificamos ese token con la función decode y la clave secreta y ya podemos identificar al usuario, con el atributo sub del objeto payload, que según este ejemplo serán un ObjectID de Mongo.</p>
+            
+            <h3>Cita de autor</h3>
+                <blockquote cite="https://articulo.mercadolibre.com.mx/MLM-747403018-air-jordan-1-x-off-white-nrg-_JM?searchVariation=48477883691&quantity=1&variation=48477883691#searchVariation=48477883691&position=6&type=item&tracking_id=8ca136a1-44c9-4e11-b565-3e2d44fbc6e5">
+                <cite>"Lo podríamos checar en una tienda de reventa ? Para verificar la autenticidad
+                Son originales, si no, los regresas"</cite>
+            </blockquote>  
+            
+            <h2>Validator</h2>
+            <div><img src="./img/valid.png" style="height: 300px;"></div>
+    </body>
+
+</html>
